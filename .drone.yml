@@ -18,10 +18,7 @@ steps:
   - name: drone-secret
     image: alpine:latest
     environment:
-      B_AAA:
-        from_secret: AAA
-      B_BBB:
-        from_secret: BBB
+      USERNAME:
+        from_secret: docker_username
     commands:
-      - echo ${B_AAA}
-      - echo ${B_BBB}
+      - echo ${USERNAME}
