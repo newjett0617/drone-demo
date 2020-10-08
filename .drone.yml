@@ -3,31 +3,25 @@ type: docker
 name: default
 
 steps:
-  - name: en
-    image: alpine
-    commands:
-      - echo hello world
-
-  - name: fr
-    image: alpine
-    commands:
-      - echo bonjour monde
-
-  - name: greeting
-    image: alpine
+  - name: hello-world
+    image: alpine:latest
     commands:
       - echo hello
       - echo world
-      - echo ${AAA}
-      - echo ${BBB}
-      - env
 
-  - name: greeting1
-    image: alpine
+  - name: show-env
+    image: alpine:latest
     commands:
       - |
-        echo hello
-        echo world
-        echo ${AAA}
-        echo ${BBB}
         env
+
+  - name: drone-secret
+    image: alpine:latest
+    environment:
+      B_AAA:
+        from_secret: AAA
+      B_BBB:
+        from_secret: BBB
+    commands:
+      - echo ${B_AAA}
+      - echo ${B_BBB}
