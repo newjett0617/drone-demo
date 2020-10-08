@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+
+  drone-server:
+    image: drone/drone:1
+    container_name: drone-server
+    volumes:
+      - ./date:/data
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - DRONE_GITHUB_CLIENT_ID=${DRONE_GITHUB_CLIENT_ID}
+      - DRONE_GITHUB_CLIENT_SECRET=${DRONE_GITHUB_CLIENT_SECRET}
+      - DRONE_RPC_SECRET=${DRONE_RPC_SECRET} # openssl rand -hex 16
+      - DRONE_SERVER_HOST=${DRONE_SERVER_HOST}
+      - DRONE_SERVER_PROTO=${DRONE_SERVER_PROTO}
+
+  drone-runner:
+    image: drone/drone-runner-docker:1
+    container_name: drone-runner
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      - DRONE_RPC_HOST=drone-server # server 與 runner 同一台
+      #- DRONE_RPC_HOST=${DRONE_SERVER_HOST} # server 與 runner 分開
+      - DRONE_RPC_PROTO=${DRONE_SERVER_PROTO}
+      - DRONE_RPC_SECRET=${DRONE_RPC_SECRET} # openssl rand -hex 16
+      - DRONE_RUNNER_CAPACITY=2
+      - DRONE_RUNNER_NAME=drone-demo-runner-name
