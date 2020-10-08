@@ -1,0 +1,33 @@
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: en
+    image: alpine
+    commands:
+      - echo hello world
+
+  - name: fr
+    image: alpine
+    commands:
+      - echo bonjour monde
+
+  - name: greeting
+    image: alpine
+    commands:
+      - echo hello
+      - echo world
+      - echo ${AAA}
+      - echo ${BBB}
+      - env
+
+  - name: greeting1
+    image: alpine
+    commands:
+      - |
+        echo hello
+        echo world
+        echo ${AAA}
+        echo ${BBB}
+        env
